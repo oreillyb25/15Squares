@@ -14,7 +14,7 @@ public class PuzzleView extends SurfaceView {
     Paint drawSquare = new Paint();
     Paint numPaint = new Paint();
 
-    Paint squares[][];
+    Paint squares[];
     public static final float boxWidth = 70f;
     public static final float boxHeight = 70f;
 
@@ -49,11 +49,26 @@ public class PuzzleView extends SurfaceView {
 
     public void drawGrid(Canvas canvas, int num) {
         num = pm.rows;
-        int row = 0;
-        int col = 0;
+        //int row = 0;
+        //int col = 0;
         boolean check = true;
         int x = 0;
-        int[][] array = new int[num][num];
+        squares = new Paint[num*num];
+        for(int i = 0; i < num*num; i++){
+            squares[i] = new Paint();
+            squares[i].setColor(Color.WHITE);
+            canvas.drawRect(i*boxWidth, boxHeight, boxWidth + (i*boxWidth), boxHeight + boxHeight,squares[i]);
+            squares[i].setColor(Color.BLACK);
+            squares[i].setStyle(Paint.Style.STROKE);
+            squares[i].setStrokeWidth(4f);
+            canvas.drawRect(i*boxWidth, boxHeight, boxWidth + (i*boxWidth), boxHeight + boxHeight,squares[i]);
+            if(i != (num*num)-1) {
+                squares[i].setColor(Color.BLACK);
+                squares[i].setTextSize(50f);
+                canvas.drawText(String.valueOf(i + 1), boxWidth * i + boxWidth / 7, boxHeight + boxHeight / 1.5f, squares[i]);
+            }
+        }
+       /* int[][] array = new int[num][num];
         squares = new Paint[num][num];
         //squares[0][0].setColor(Color.WHITE);
         for(row = 0; row < num; row++) {
@@ -84,7 +99,7 @@ public class PuzzleView extends SurfaceView {
                 }
                 x++;
             }*/
-        }
+        //}
 
         /*for(int i = 0; i < num; i++){
                 for(int j = 0; j < num; i++){
