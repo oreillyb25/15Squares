@@ -7,6 +7,10 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.SurfaceView;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 public class PuzzleView extends SurfaceView {
@@ -15,6 +19,8 @@ public class PuzzleView extends SurfaceView {
     Paint numPaint = new Paint();
 
     Paint squares[];
+    Paint forL[][];
+    Paint new_arr[];
     public static final float boxWidth = 70f;
     public static final float boxHeight = 70f;
 
@@ -25,6 +31,7 @@ public class PuzzleView extends SurfaceView {
     //may have to implement Runnable()
 
     //all constructors from api of surfaceview
+
     public PuzzleView(Context context) {
         super(context);
     }
@@ -43,17 +50,11 @@ public class PuzzleView extends SurfaceView {
         return pm;
     }
 
-    public void Shuffle(){
-//pass in paint double array omg SLAYYYYYYYYY
-    }
 
     public void drawGrid(Canvas canvas, int num) {
         num = pm.rows;
-        //int row = 0;
-        //int col = 0;
-        boolean check = true;
-        int x = 0;
         squares = new Paint[num*num];
+
         for(int i = 0; i < num*num; i++){
             squares[i] = new Paint();
             squares[i].setColor(Color.WHITE);
@@ -68,74 +69,50 @@ public class PuzzleView extends SurfaceView {
                 canvas.drawText(String.valueOf(i + 1), boxWidth * i + boxWidth / 7, boxHeight + boxHeight / 1.5f, squares[i]);
             }
         }
-       /* int[][] array = new int[num][num];
-        squares = new Paint[num][num];
-        //squares[0][0].setColor(Color.WHITE);
-        for(row = 0; row < num; row++) {
-            for(col = 0; col < num; col++){
-                squares[row][col] = new Paint();
-                squares[row][col].setColor(Color.WHITE);
-                canvas.drawRect(col*boxWidth, row*boxHeight, boxWidth + (col*boxWidth), boxHeight + (row*boxHeight),squares[row][col]);
-                squares[row][col].setColor(Color.BLACK);
-                squares[row][col].setStyle(Paint.Style.STROKE);
-                squares[row][col].setStrokeWidth(4f);
-                canvas.drawRect(col*boxWidth, row*boxHeight, boxWidth + (col*boxWidth), boxHeight + (row*boxHeight),squares[row][col]);
-                if(check){
-                    x = row+col;
-                    squares[row][col].setColor(Color.BLACK);
-                    squares[row][col].setTextSize(50f);
-                    canvas.drawText(String.valueOf(x), boxWidth*row + boxWidth/8, boxHeight*col - boxHeight/4, squares[row][col]);
 
+
+        forL = new Paint[num][num];
+        int i = 0;
+        int j = 0;
+        int counter = 1;
+        for(i = 0; i < num; i++){
+            for(j = 0; j < num; j++){
+                forL[i][j] = new Paint();
+                forL[i][j].setColor(Color.WHITE);
+                canvas.drawRect(i*boxWidth, j*boxHeight, boxWidth + (i*boxWidth), boxHeight + j*boxHeight,forL[i][j]);
+                forL[i][j].setColor(Color.BLACK);
+                forL[i][j].setStyle(Paint.Style.STROKE);
+                forL[i][j].setStrokeWidth(4f);
+                canvas.drawRect(i*boxWidth, j*boxHeight, boxWidth + (i*boxWidth), boxHeight + j*boxHeight,forL[i][j]);
+                if(i != num-1 && j != num-1) {
+                    forL[i][j].setColor(Color.BLACK);
+                    forL[i][j].setTextSize(50f);
+                    canvas.drawText(String.valueOf(counter), boxWidth*i + boxWidth/8, boxHeight*j - boxHeight/4, forL[i][j]);
                 }
+                counter++;
             }
+        }
 
-            /*for(int i = 0; i < squares.length; i++){
-                for(int j = 0; j < squares[i].length; i++){
-                    x = x+j;
-                    squares[i][j] = new Paint();
-                    squares[i][j].setColor(Color.BLACK);
-                    squares[i][j].setTextSize(50f);
-                    canvas.drawText(String.valueOf(x), boxWidth*i + boxWidth/8, boxHeight*j - boxHeight/4, squares[i][j]);
-                }
-                x++;
-            }*/
-        //}
+        //Shuffle(squares);
+    }
 
-        /*for(int i = 0; i < num; i++){
-                for(int j = 0; j < num; i++){
-                    x = x+j;
-                    squares[i][j] = new Paint();
-                    squares[i][j].setColor(Color.BLACK);
-                    squares[i][j].setTextSize(50f);
-                    canvas.drawText(String.valueOf(x), boxWidth*i + boxWidth/8, boxHeight*j - boxHeight/4, squares[i][j]);
-                }
-
-            }*/
-        //drawSquare.setColor(Color.BLUE);
-        //canvas.drawRect(num*boxWidth, num*boxHeight, boxWidth + (num*boxWidth), boxHeight + (num*boxHeight), drawSquare);
-        /*for(int row = 0; row < num; row++){
-            for(int col = 0; col < num; col++){
-                canvas.drawRect(col*boxWidth, row*boxHeight, boxWidth + (col*boxWidth), boxHeight + (row*boxHeight), drawSquare);
-                drawSquare.setColor(Color.BLACK);
-                drawSquare.setStrokeWidth(10f);
-                drawSquare.setStyle(Paint.Style.STROKE);
-                canvas.drawRect(col*boxWidth, row*boxHeight, boxWidth + (col*boxWidth), boxHeight + (row*boxHeight), drawSquare);
-             if(row*col != num*num){
-                 //draw number in the box
-                 int x = row+col+1;
-                 numPaint.setColor(Color.BLACK);
-                 numPaint.setTextSize(50f);
-                 canvas.drawText(String.valueOf(x), boxWidth*row + boxWidth/4, boxHeight + boxHeight/2, numPaint);
-             }
-            }
-
-        }*/
+    public Paint[] Shuffle(Canvas canvas, Paint [] array){
+        //this.drawGrid(canvas, pm.rows);
+        new_arr = new Paint[pm.rows*pm.rows];
+        List<Paint> list = Arrays.asList(squares);
+        Collections.shuffle(list);
+        list.toArray(new_arr);
+        return new_arr;
     }
 
     public void onDraw(Canvas canvas){
         if(pm.board){
+            //Shuffle(arr);
+            //drawGrid dg = new drawGrid(canvas, pm.rows);
+            //Shuffle(canvas, squares);
             drawGrid(canvas, pm.rows);
         }
     }
+
     }
 
